@@ -182,7 +182,7 @@ public class AFDController implements Initializable {
             int i = 0;
             while (i < lista.size()) {
                 result = Mensaje.leerBotonDeshabilitado("Transiciones",
-                        "Para ingresar Lambda click en el botón aceptar o cerrar",
+                        "Para ingresar vacio click en el botón Aceptar",
                         "δ(" + estado + ", " + lista.get(i) + ") ↦");
                 if (result.isPresent()) {
                     if (result.get().length() == 0) {
