@@ -101,8 +101,9 @@ public class AFDController implements Initializable {
 
     @FXML
     private void accionEFinal(ActionEvent event) {
-        Optional<String> result = Mensaje.leer("Estados finales", null,
-                "Defina el o los estados finales");
+        Optional<String> result = Mensaje.leer("Estados finales",
+                "Defina el o los estados finales separados por coma",
+                "Ejemplo: q2,q3");
         if (result.isPresent()) {
             if (result.get().length() != 0) {
                 String elimiacionDeEspacios = result.get().replace(" ", "");
