@@ -3,6 +3,9 @@ package controller;
 import model.Mensaje;
 import model.AFD;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -174,20 +177,24 @@ public class AFDController implements Initializable {
 
     private void crearTransiciones() {
         Optional<String> result;
+        List<String> lista = new ArrayList<String>(afd.getAlfabeto().getSimbolo());
         for (String estado : afd.getEstados().getEstados()) {
-            for (String simbolo : afd.getAlfabeto().getSimbolo()) {
+            int i = 0;
+            while (i < lista.size()) {
                 result = Mensaje.leerBotonDeshabilitado("Transiciones",
                         "Para ingresar Lambda click en el botón aceptar o cerrar",
-                        "δ(" + estado + ", " + simbolo + ") ↦");
+                        "δ(" + estado + ", " + lista.get(i) + ") ↦");
                 if (result.isPresent()) {
                     if (result.get().length() == 0) {
-                        afd.getTransiciones().add(new Transicion(estado, simbolo,
+                        afd.getTransiciones().add(new Transicion(estado, lista.get(i),
                                 null));
+                        i++;
                     } else if (!afd.getEstados().getEstados().contains(result.get())) {
                         Mensaje.error("El estado debe pertenecer al conjunto de estados");
                     } else {
-                        afd.getTransiciones().add(new Transicion(estado, simbolo,
+                        afd.getTransiciones().add(new Transicion(estado, lista.get(i),
                                 result.get()));
+                        i++;
                     }
                 }
             }
