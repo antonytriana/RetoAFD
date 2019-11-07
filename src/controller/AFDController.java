@@ -29,6 +29,8 @@ public class AFDController implements Initializable {
     private Button buttonEInicial;
     @FXML
     private Button buttonEFinal;
+    @FXML
+    private Button buttonTransiciones;
 
     private AFD afd = new AFD();
 
@@ -96,7 +98,7 @@ public class AFDController implements Initializable {
                     afd.getEstados().agregarEstadosFinales(separacionSimbolos);
                     labelEstadosFinales.setText(afd.getEstados().estadosFinales());
                     buttonEFinal.setDisable(true);
-                    buttonAlfabeto.setDisable(false);
+                    buttonTransiciones.setDisable(false);
                 } catch (Exception ex) {
                     Mensaje.error(ex.getMessage());
                 }
@@ -106,11 +108,17 @@ public class AFDController implements Initializable {
         }
     }
 
+    @FXML
+    private void accionTransiciones(ActionEvent event) {
+
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buttonEstados.setDisable(true);
         buttonEInicial.setDisable(true);
         buttonEFinal.setDisable(true);
+        buttonTransiciones.setDisable(true);
 
     }
 

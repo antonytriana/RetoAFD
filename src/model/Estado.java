@@ -1,7 +1,7 @@
 package model;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
@@ -14,8 +14,8 @@ public class Estado {
     private String estadoInicial;
 
     public Estado() {
-        this.estados = new HashSet<String>();
-        this.estadosFinales = new HashSet<String>();
+        this.estados = new TreeSet<String>();
+        this.estadosFinales = new TreeSet<String>();
     }
 
     public void agregarEstado(String[] estados) {
@@ -25,9 +25,7 @@ public class Estado {
     }
 
     public void agregarEstadoInicial(String estadoInicial) throws Exception {
-        System.out.println(this.estados.contains(estadoInicial));
         if (!this.estados.contains(estadoInicial)) {
-            System.out.println("Errrrrr");
             throw new Exception("El estado inicial debe pertenecer"
                     + " al conjunto de estado");
         }

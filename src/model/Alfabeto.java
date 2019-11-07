@@ -1,7 +1,7 @@
 package model;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
@@ -12,7 +12,7 @@ public class Alfabeto {
     private Set<String> simbolo;
 
     public Alfabeto() {
-        this.simbolo = new HashSet<String>();
+        this.simbolo = new TreeSet<String>();
     }
 
     public Set<String> getSimbolo() {

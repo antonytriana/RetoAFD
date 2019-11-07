@@ -68,6 +68,14 @@
                   <Button fx:id="buttonEFinal" mnemonicParsing="false" onAction="#accionEFinal" prefHeight="25.0" prefWidth="118.0" text="4. Definir F" />
                </children>
             </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="41.0" prefWidth="306.0" spacing="15.0">
+               <children>
+                  <Button fx:id="buttonTransiciones" alignment="TOP_CENTER" mnemonicParsing="false" onAction="#accionTransiciones" prefHeight="25.0" prefWidth="118.0" text="5. Transiciones" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
          </children>
          <opaqueInsets>
             <Insets left="10.0" right="10.0" />
