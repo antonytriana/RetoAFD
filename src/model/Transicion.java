@@ -11,7 +11,7 @@ public class Transicion {
     private String estadoSiguiente;
 
     public Transicion(String estadoActual, String simbolo,
-                      String estadoSiguiente) {
+            String estadoSiguiente) {
         this.estadoActual = estadoActual;
         this.simbolo = simbolo;
         this.estadoSiguiente = estadoSiguiente;
@@ -41,5 +41,11 @@ public class Transicion {
         this.estadoSiguiente = estadoSiguiente;
     }
 
+    @Override
+    public String toString() {
+        return "Transicion{" + "estadoActual=" + estadoActual + ","
+                + " simbolo=" + simbolo + ","
+                + " siguienteEstado=" + estadoSiguiente + '}';
+    }
 
 }
