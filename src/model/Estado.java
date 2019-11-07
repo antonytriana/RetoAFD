@@ -57,4 +57,12 @@ public class Estado {
         return estadoInicial;
     }
 
+    public Set<String> getEstados() {
+        return estados;
+    }
+
+    public Set<String> getEstadosFinales() {
+        return estadosFinales;
+    }
+
 }
