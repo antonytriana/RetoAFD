@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class Principal extends Application {
 
@@ -13,7 +12,7 @@ public class Principal extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/view/Principal.fxml"));
         primaryStage.setTitle("Reto AFD");
         primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root, 349, 388));
+        primaryStage.setScene(new Scene(root, 720, 470));
         primaryStage.show();
     }
 
