@@ -5,8 +5,6 @@ import model.AFD;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +25,10 @@ public class AFDController implements Initializable {
     private Button buttonEstados;
     @FXML
     private Button buttonAlfabeto;
+    @FXML
+    private Button buttonEInicial;
+    @FXML
+    private Button buttonEFinal;
 
     private AFD afd = new AFD();
 
@@ -71,6 +73,8 @@ public class AFDController implements Initializable {
                 try {
                     afd.getEstados().agregarEstadoInicial(result.get());
                     labelEstadoInicial.setText(afd.getEstados().getEstadoInicial());
+                    buttonEInicial.setDisable(true);
+                    buttonEFinal.setDisable(false);
                 } catch (Exception ex) {
                     Mensaje.error(ex.getMessage());
                 }
@@ -91,6 +95,8 @@ public class AFDController implements Initializable {
                 try {
                     afd.getEstados().agregarEstadosFinales(separacionSimbolos);
                     labelEstadosFinales.setText(afd.getEstados().estadosFinales());
+                    buttonEFinal.setDisable(true);
+                    buttonAlfabeto.setDisable(false);
                 } catch (Exception ex) {
                     Mensaje.error(ex.getMessage());
                 }
@@ -103,6 +109,9 @@ public class AFDController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buttonEstados.setDisable(true);
+        buttonEInicial.setDisable(true);
+        buttonEFinal.setDisable(true);
+
     }
 
     private void crearAlfabeto(String[] simbolos) {
@@ -110,6 +119,7 @@ public class AFDController implements Initializable {
             afd.getAlfabeto().agregarSimbolo(simbolos);
             labelAlfabeto.setText(afd.getAlfabeto().toString());
             buttonEstados.setDisable(false);
+            buttonAlfabeto.setDisable(true);
         } catch (Exception ex) {
             Mensaje.error(ex.getMessage());
         }
@@ -119,5 +129,7 @@ public class AFDController implements Initializable {
     private void crearEstados(String[] estados) {
         afd.getEstados().agregarEstado(estados);
         labelEstados.setText(afd.getEstados().toString());
+        buttonEInicial.setDisable(false);
+        buttonEstados.setDisable(true);
     }
 }
