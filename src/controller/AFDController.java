@@ -10,6 +10,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import model.Transicion;
 
 public class AFDController implements Initializable {
 
@@ -31,8 +35,18 @@ public class AFDController implements Initializable {
     private Button buttonEFinal;
     @FXML
     private Button buttonTransiciones;
+    @FXML
+    private Button buttonNuevoAFD;
+    @FXML
+    private VBox vBoxBotones;
+    @FXML
+    private VBox vBoxValidar;
+    @FXML
+    private TextField textCadena = new TextField();
+    @FXML
+    private TextArea textArea;
 
-    private AFD afd = new AFD();
+    private AFD afd;
 
     @FXML
     private void accionAlfabeto(ActionEvent event) {
@@ -75,8 +89,7 @@ public class AFDController implements Initializable {
                 try {
                     afd.getEstados().agregarEstadoInicial(result.get());
                     labelEstadoInicial.setText(afd.getEstados().getEstadoInicial());
-                    buttonEInicial.setDisable(true);
-                    buttonEFinal.setDisable(false);
+                    botones(false, true, true, true, true, false, true);
                 } catch (Exception ex) {
                     Mensaje.error(ex.getMessage());
                 }
@@ -97,8 +110,7 @@ public class AFDController implements Initializable {
                 try {
                     afd.getEstados().agregarEstadosFinales(separacionSimbolos);
                     labelEstadosFinales.setText(afd.getEstados().estadosFinales());
-                    buttonEFinal.setDisable(true);
-                    buttonTransiciones.setDisable(false);
+                    botones(false, true, true, true, true, true, false);
                 } catch (Exception ex) {
                     Mensaje.error(ex.getMessage());
                 }
@@ -110,15 +122,36 @@ public class AFDController implements Initializable {
 
     @FXML
     private void accionTransiciones(ActionEvent event) {
+        crearTransiciones();
+        botones(true, false, true, true, true, true, true);
+        for (Transicion transicione : afd.getTransiciones()) {
+            System.out.println(transicione.toString());
+        }
+    }
+
+    @FXML
+    private void accionNuevoAFD(ActionEvent event) {
+        afd = new AFD();
+        botones(false, true, false, true, true, true, true);
+        labelAlfabeto.setText("vacio");
+        labelEstados.setText("vacio");
+        labelEstadoInicial.setText("vacio");
+        labelEstadosFinales.setText("vacio");
+    }
+
+    @FXML
+    private void accionValidar() {
+        if (afd.noPerteneceACadena(textCadena.getText())) {
+            Mensaje.error("La cadena ingresada no corresponde con el alfabeto");
+        } else {
+            validacionCadena();
+        }
 
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        buttonEstados.setDisable(true);
-        buttonEInicial.setDisable(true);
-        buttonEFinal.setDisable(true);
-        buttonTransiciones.setDisable(true);
+        botones(false, false, true, true, true, true, true);
 
     }
 
@@ -126,18 +159,81 @@ public class AFDController implements Initializable {
         try {
             afd.getAlfabeto().agregarSimbolo(simbolos);
             labelAlfabeto.setText(afd.getAlfabeto().toString());
-            buttonEstados.setDisable(false);
-            buttonAlfabeto.setDisable(true);
+            botones(false, true, true, false, true, true, true);
         } catch (Exception ex) {
             Mensaje.error(ex.getMessage());
         }
-        System.out.println(afd.getAlfabeto());
     }
 
     private void crearEstados(String[] estados) {
         afd.getEstados().agregarEstado(estados);
         labelEstados.setText(afd.getEstados().toString());
-        buttonEInicial.setDisable(false);
-        buttonEstados.setDisable(true);
+        botones(false, true, true, true, false, true, true);
     }
+
+    private void crearTransiciones() {
+        Optional<String> result;
+        for (String estado : afd.getEstados().getEstados()) {
+            for (String simbolo : afd.getAlfabeto().getSimbolo()) {
+                result = Mensaje.leerBotonDeshabilitado("Transiciones",
+                        "Para ingresar Lambda click en el botón aceptar o cerrar",
+                        "δ(" + estado + ", " + simbolo + ") ↦");
+                if (result.isPresent()) {
+                    if (result.get().length() == 0) {
+                        afd.getTransiciones().add(new Transicion(estado, simbolo,
+                                null));
+                    } else if (!afd.getEstados().getEstados().contains(result.get())) {
+                        Mensaje.error("El estado debe pertenecer al conjunto de estados");
+                    } else {
+                        afd.getTransiciones().add(new Transicion(estado, simbolo,
+                                result.get()));
+                    }
+                }
+            }
+        }
+    }
+
+    private void validacionCadena() {
+        String estado = afd.getEstados().getEstadoInicial();
+        String simbolo;
+        String siguienteEstado = "";
+        String pasos = "W = " + textCadena.getText() + "\n";
+
+        for (int i = 0; i < textCadena.getText().length(); i++) {
+            simbolo = String.valueOf(textCadena.getText().charAt(i));
+
+            pasos += "δ(" + estado + ", " + simbolo + ") ";
+
+            siguienteEstado = afd.funcionTransicion(estado, simbolo);
+
+            pasos += "= " + siguienteEstado + "\n";
+            estado = siguienteEstado;
+            if (siguienteEstado == null) {
+                pasos += "Vacio, se detiene el proceso\n";
+                break;
+            }
+        }
+
+        if (siguienteEstado != null && afd.getEstados().getEstadosFinales()
+                .contains(siguienteEstado)) {
+            pasos += "W es Aceptada\n\n";
+        } else {
+            pasos += "W es Rechazada\n\n";
+        }
+        textArea.appendText(pasos);
+    }
+
+    public void botones(boolean vBoxValidar, boolean vBoxBotones,
+            boolean buttonAlfabeto, boolean buttonEstados,
+            boolean buttonEInicial, boolean buttonEFinal,
+            boolean buttonTransiciones) {
+        this.vBoxValidar.setVisible(vBoxValidar);
+        this.vBoxBotones.setVisible(vBoxBotones);
+        this.buttonAlfabeto.setDisable(buttonAlfabeto);
+        this.buttonEstados.setDisable(buttonEstados);
+        this.buttonEInicial.setDisable(buttonEInicial);
+        this.buttonEFinal.setDisable(buttonEFinal);
+        this.buttonTransiciones.setDisable(buttonTransiciones);
+    }
+
 }
